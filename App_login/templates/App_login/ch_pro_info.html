@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block body_block %}
+<div class="container none sign m-4 p-4">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{% static 'img/changeinfo.jpeg' %}" alt="">
+        </div>
+        <div class="col-md-6">
+            <form method="POST">
+                {% csrf_token %}
+                {{form|crispy}}
+                <input type="submit" value="Update" class="btn btn-outline-primary"><br>
+                <a href="{% url 'App_login:password_change' %}"> Change your password </a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock body_block %}

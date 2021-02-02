@@ -1,0 +1,18 @@
+{% extends 'base.html' %}{% load crispy_forms_tags %}
+{% block body_block %}
+<div class="card shadow p-3 mb-5 bg-white rounded align-content-center center" style="width: 25rem;">
+    
+    {% if user.user_profile %}
+    <img style="height:250px;" src="/media/{{user.user_profile.profile_pic}}" alt="">
+        {% else %}
+        <img src="/media/profile_images/default.png" alt="">
+    {% endif %}
+        
+<form action="" method="POST" enctype="multipart/form-data">
+    {{form|crispy}}
+    {% csrf_token %}
+    <button class="btn btn-outline-primary" type="submit" name="Upload">Upload</button>
+</form>
+</div>
+{% endblock body_block %}
+    

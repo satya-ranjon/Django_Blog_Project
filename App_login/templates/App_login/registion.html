@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block body_block %}
+<div class="sign ">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{% static 'img/sign.jpg' %}" alt="">
+        </div>
+        <div class="col-md-6">
+            <div class="forms">
+                <h2>Sign Up </h2>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{form|crispy}}
+                    <input type="submit" class="btn btn-outline-primary" value="Sign Up">
+                </form>
+                <br>
+                <a href="{% url 'App_login:login' %}">
+                    <p>Already have a accound @login here </p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock body_block %}

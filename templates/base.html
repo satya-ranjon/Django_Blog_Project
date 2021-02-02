@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title_block %}
+        Wp blog skt
+        {% endblock title_block %}</title>
+    <!-- CSS only -->
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+                aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'img/logo.png' %}" alt=""></a>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+                    </li>
+
+                </ul>
+                <form class="d-flex">
+
+                    <div class="dropdown">
+                        <button class="btn btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            {% if user.user_profile %}
+                            <img src="/media/{{user.user_profile.profile_pic}}" alt="">
+                            {% else %}
+                            <img src="/media/profile_images/default.png">
+                            {% endif %}
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            {% if user.is_authenticated %}
+                            <li><a class="dropdown-item" href="{% url 'App_login:profile_info' %}">Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'App_login:ChangeProInfo' %}">ChangeProInfo</a>
+                            <li><a class="dropdown-item" href="{% url 'App_post:Create_blog' %}">Create Blog</a>
+                            <li><a class="dropdown-item" href="{% url 'App_post:MyBlogs' %}">My Blog</a>
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'App_login:logout' %}">Logout</a></li>
+
+                            {% else %}
+                            <li><a class="dropdown-item" href="{% url 'App_login:retistion' %}">Sign Up</a></li>
+                            <li><a class="dropdown-item" href="{% url 'App_login:login' %}">Login</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+
+    {% for message in messages %}
+    <div class="alert {{message.tags}} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+
+
+    <!-- body_blog -->
+    {% block body_block %}
+    {% endblock body_block %}
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous">
+    </script>
+    <script src="{% static 'js/all.min.js' %}"></script>
+
+</body>
+
+</html>

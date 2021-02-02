@@ -1,0 +1,133 @@
+{% extends 'base.html' %}{% load static %}
+{% load custom_filters %}
+{% block title_block %}
+{{user.username}}
+{% endblock title_block %}
+{% block body_block %}
+
+<div class="card_one">
+    <div class="box">
+        <div class="header">
+            {% if user.user_profile_bg %}
+            <img src="/media/{{user.user_profile_bg.profile_pic_bg}}" alt="">
+            <a href="{% url 'App_login:change_pro_pic_bg' %}" type="button" class="btn btn-primary bg_img_up">
+                Upload
+            </a>
+            {% else %}
+            <img src="/media/profile__bg_images/default.png">
+            <a href="{% url 'App_login:bag_img_profile' %}" type="button" class="btn btn-primary bg_img_up">
+                Upload
+            </a>
+            {% endif %}
+        </div>
+
+        <div class="profile_pic_box">
+            <div class="profile_pic">
+                {% if user.user_profile %}
+                <img src="/media/{{user.user_profile.profile_pic}}" alt="">
+                <a href="{% url 'App_login:change_pro_pic' %}" type="button" class="btn btn-primary pr_img_up">
+                    Upload
+                </a>
+                {% else %}
+                <img src="/media/profile_images/default.png">
+                <button type="button" class="btn btn-primary pr_img_up" data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop">
+                    Upload
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- <img src="{%static 'img/changeinfo.jpeg' %}" alt=""> -->
+    <h1>Username: {{user.username}}</h1>
+    <h1>Name: {{user.first_name}} {{user.last_name}}</h1>
+    <h1>Email : {{user.email}}</h1>
+
+
+
+    <!-- my blog  -->
+    <h2 class=" bg-danger p-3 " style="text-align:center; color: #ffffff;margin: 22px 0px;">My blog </h2>
+    <div class="container p-4">
+        {% for blog in user.blog_author.all  %}
+        <br>
+        
+        <h2><span class="badge bg-primary">Title</span> : {{blog.blog_title}}</h2>
+        <p>
+            Publich date : <span class="time_date">{{blog.publich_date|date:"SHORT_DATE_FORMAT"}} - {{blog.publich_date|date:"h:i a"}}</span>
+            <!-- Update -->
+            / Update date
+            :<span class="time_date">{{blog.update_date|date:"SHORT_DATE_FORMAT"}} - {{blog.update_date|date:"h:i a"}}</span>
+        </p>
+
+        <p>
+            {% if blog.blog_comment.count == 0 %}
+            Comment : <span class="time_date">{{blog.blog_comment.count}}</span>
+            {% elif blog.blog_comment.count == 1 %}
+            Comment : <span class="time_date">{{blog.blog_comment.count}}</span>
+            {% else %}
+            Comments : <span class="time_date">{{blog.blog_comment.count}}</span>
+            {% endif %}
+            <!-- likes -->
+            / {% if blog.blog_like.count == 0 %}
+            Like : <span class="time_date">{{blog.blog_like.count}}</span>
+            {% elif blog.blog_like.count == 1 %}
+            Like : <span class="time_date">{{blog.blog_like.count}}</span>
+            {% else %}
+            Likes : <span class="time_date">{{blog.blog_like.count}}</span>
+            {% endif %}
+            <!-- Author -->
+            / Author : <span class="time_date"> @{{blog.author}}</span>
+        </p>
+        <div class="row">
+            <div class="col-md-4">
+                <img style="width: 100%; height: 13rem;" src="/media/{{blog.blog_img}}" alt="">
+            </div>
+            <div class="col-md-8">
+                <p style="line-height: 1.8rem;">
+                    {{blog.blog|range_filter|linebreaks}}
+                    <a href="{% url 'App_post:blog_detiels' slug=blog.slug %}" style="text-decoration: none;">Read more
+                        ......</a>
+                    <!-- edit ///   -->
+                    <a class="btn btn-danger" href="{% url 'App_post:EditBlog' pk=blog.pk %}"
+                        style="text-decoration: none;">Edit Blog</a>
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img src="{% static 'img/default.png' %}" alt="">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {{form}}
+                    {% csrf_token %}
+                    <input type="submit">
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- masseage load -->
+
+{% endblock body_block %}

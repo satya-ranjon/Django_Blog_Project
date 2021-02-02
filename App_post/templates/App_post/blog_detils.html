@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block body_block %}
+<div class="container">
+    <h2><span class="badge bg-primary">Title</span> : {{blog.blog_title}}</h2>
+    <p>
+        Publich date : <span class="time_date">{{blog.publich_date|date:"SHORT_DATE_FORMAT"}} -
+            {{blog.publich_date|date:"h:i a"}}</span>
+        <!-- Update -->
+        / Update date
+        :<span class="time_date">{{blog.update_date|date:"SHORT_DATE_FORMAT"}} -
+            {{blog.update_date|date:"h:i a"}}</span>
+    </p>
+
+    <p>
+        {% if blog.blog_comment.count == 0 %}
+        Comment : <span class="time_date">{{blog.blog_comment.count}}</span>
+        {% elif blog.blog_comment.count == 1 %}
+        Comment : <span class="time_date">{{blog.blog_comment.count}}</span>
+        {% else %}
+        Comments : <span class="time_date">{{blog.blog_comment.count}}</span>
+        {% endif %}
+        <!-- likes -->
+        / {% if blog.blog_like.count == 0 %}
+        Like : <span class="time_date">{{blog.blog_like.count}}</span>
+        {% elif blog.blog_like.count == 1 %}
+        Like : <span class="time_date">{{blog.blog_like.count}}</span>
+        {% else %}
+        Likes : <span class="time_date">{{blog.blog_like.count}}</span>
+        {% endif %}
+        <!-- Author -->
+        / Author : <a href="{% url 'App_post:or_profile' username=blog.author %}" class="time_date"> @{{blog.author}}</a>
+    </p>
+
+
+
+    <img src="/media/{{blog.blog_img}}" alt="" style="height: 500px;width:100%;">
+    <p>{{blog.blog|linebreaks}}</p><br>
+    <hr>
+
+
+    <!-- Likes \\\\\\\\\\\\ -->
+    <h3>
+        {% if blog.blog_like.count == 0 %}
+        Like : <span class="time_date">{{blog.blog_like.count}}</span>
+        {% elif blog.blog_like.count == 1 %}
+        Like : <span class="time_date">{{blog.blog_like.count}}</span>
+        {% else %}
+        Likes : <span class="time_date">{{blog.blog_like.count}}</span>
+        {% endif %}
+    </h3>
+    {% if not liked %}
+    <a style="font-size: 7rem;" href="{% url 'App_post:like' pk=blog.pk %}"><i class="fas fa-thumbs-up"></i></a>
+    {% else %}
+    <a style="font-size: 7rem;" href="{% url 'App_post:Unlike' pk=blog.pk %}"><i class="fas fa-thumbs-down"></i></a>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-4">
+            <!-- comments show\\\\\\\ -->
+            <h3>
+                {% if blog.blog_comment.count == 0 %}
+                Comment : <span class="time_date">{{blog.blog_comment.count}}</span>
+                {% elif blog.blog_comment.count == 1 %}
+                Comment : <span class="time_date">{{blog.blog_comment.count}}</span>
+                {% else %}
+                Comments : <span class="time_date">{{blog.blog_comment.count}}</span>
+                {% endif %}
+            </h3>
+            <!-- comment\\\\\\\\\\\\ -->
+            {% for comment in blog.blog_comment.all %}
+            <ul>
+                <li><span class="time_date">@{{comment.user}}</span><br> {{comment.comment}}</li>
+            </ul>
+            {% endfor %}
+            <!-- ///////////////// -->
+        </div>
+        <div class="col-md-8">
+            <form action="" method="POST">
+                {{comment|crispy}}{% csrf_token %}<br>
+                <button class="btn btn-outline-primary">Comment</button><br><br>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock body_block %}

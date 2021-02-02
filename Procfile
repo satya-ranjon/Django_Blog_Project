@@ -1,0 +1,1 @@
+web: gunicorn New_Blog_Project_Mester.wsgi

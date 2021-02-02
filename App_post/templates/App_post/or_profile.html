@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block body_block %}
+
+<div class="card_one">
+    <div class="box">
+        <div class="header">
+            {% if profile.user_profile_bg %}
+            <img src="/media/{{profile.user_profile_bg.profile_pic_bg}}" alt="">
+            {% else %}
+            <img src="/media/profile__bg_images/default.png">
+            {% endif %}
+        </div>
+
+        <div class="profile_pic_box">
+            <div class="profile_pic">
+                {% if profile.user_profile %}
+                <img src="/media/{{profile.user_profile.profile_pic}}" alt="">
+                {% else %}
+                <img src="/media/profile_images/default.png">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- <img src="{%static 'img/changeinfo.jpeg' %}" alt=""> -->
+    <h1>Username: {{profile.username}}</h1>
+    <h1>Name: {{profile.first_name}} {{profile.last_name}}</h1>
+    <h1>Email : {{profile.email}}</h1>
+
+
+
+    <!-- my blog  -->
+    <h2 class=" bg-danger p-3 " style="text-align:center; color: #ffffff;margin: 22px 0px;">{{profile.username}}  blog </h2>
+    <div class="container p-4">
+        {% for blog in profile.blog_author.all  %}
+        <br>
+        
+        <h2><span class="badge bg-primary">Title</span> :
+            {% if user.is_authenticated %}
+            <a style="color:#212529; text-decoration:none;" href="{% url 'App_post:blog_detiels' slug=blog.slug %}" style="text-decoration: none;">{{blog.blog_title}}</a>
+            {% else %}
+            <a style="color:#212529; text-decoration:none;" href="{% url 'App_post:BlogDetitel1' slug=blog.slug %}" style="text-decoration: none;">{{blog.blog_title}}</a>
+            {% endif %}
+        </h2>
+        <p>
+            Publich date : <span class="time_date">{{blog.publich_date|date:"SHORT_DATE_FORMAT"}} - {{blog.publich_date|date:"h:i a"}}</span>
+            <!-- Update -->
+            / Update date
+            :<span class="time_date">{{blog.update_date|date:"SHORT_DATE_FORMAT"}} - {{blog.update_date|date:"h:i a"}}</span>
+        </p>
+
+        <p>
+            {% if blog.blog_comment.count == 0 %}
+            Comment : <span class="time_date">{{blog.blog_comment.count}}</span>
+            {% elif blog.blog_comment.count == 1 %}
+            Comment : <span class="time_date">{{blog.blog_comment.count}}</span>
+            {% else %}
+            Comments : <span class="time_date">{{blog.blog_comment.count}}</span>
+            {% endif %}
+            <!-- likes -->
+            / {% if blog.blog_like.count == 0 %}
+            Like : <span class="time_date">{{blog.blog_like.count}}</span>
+            {% elif blog.blog_like.count == 1 %}
+            Like : <span class="time_date">{{blog.blog_like.count}}</span>
+            {% else %}
+            Likes : <span class="time_date">{{blog.blog_like.count}}</span>
+            {% endif %}
+            <!-- Author -->
+            / Author : <span class="time_date"> @{{blog.author}}</span>
+        </p>
+        <div class="row">
+            <div class="col-md-4">
+                <img style="width: 100%; height: 13rem;" src="/media/{{blog.blog_img}}" alt="">
+            </div>
+            <div class="col-md-8">
+                <p style="line-height: 1.8rem;">
+                    {{blog.blog|range_filter|linebreaks}}
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'App_post:blog_detiels' slug=blog.slug %}" style="text-decoration: none;">Read more
+                        ......</a>
+                    {% else %}
+                    <a href="{% url 'App_post:BlogDetitel1' slug=blog.slug %}" style="text-decoration: none;">Read more
+                        ......</a>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+
+{% endblock body_block %}
